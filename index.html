@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1425">
+<title>SoulMatch — Discover who AI thinks is your perfect partner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Azeret+Mono:wght@300;400&family=Intel+One+Mono:wght@300;400&display=swap">
+<style>
+:root {
+  --bg:           #120F11;
+  --bg-deep:      #0A0706;
+  --bg-deeper:    #000000;
+  --bg-panel:     #13100D;
+  --bg-panel-2:   #201A1D;
+  --bg-panel-3:   #161616;
+  --cream:        #ECE4D7;
+  --cream-62:     rgba(236,228,215,.62);
+  --cream-60:     rgba(236,228,215,.60);
+  --cream-38:     rgba(236,228,215,.38);
+  --cream-18:     rgba(236,228,215,.18);
+  --cream-15:     rgba(236,228,215,.15);
+  --cream-08:     rgba(236,228,215,.08);
+  --gold:         #D4A574;
+  --gold-60:      rgba(212,165,116,.6);
+  --gold-35:      rgba(212,165,116,.35);
+  --gold-15:      rgba(212,165,116,.15);
+  --gold-12:      rgba(212,165,116,.12);
+  --gold-08:      rgba(212,165,116,.08);
+  --pink:         #FF91A5;
+  --pink-soft:    #FFC4CF;
+  --pink-20:      rgba(200,155,163,.20);
+  --pink-30:      rgba(200,155,163,.30);
+  --bubble-pink:  #FFA5A5;
+  --bubble-gold:  #766142;
+  --bubble-orange:#FF9E6E;
+  --bubble-purple:#8A6AB8;
+  --ink:          #0A0806;
+  --serif:        "Cormorant Garamond", "Noto Serif", Georgia, serif;
+  --serif-alt:    "Noto Serif", Georgia, serif;
+  --sans:         "Inter", ui-sans-serif, system-ui, sans-serif;
+  --mono:         "Azeret Mono", "Intel One Mono", ui-monospace, monospace;
+  --mono-alt:     "Intel One Mono", ui-monospace, monospace;
+  --max-w:        1425px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg-deep); color: var(--cream); }
+body { font-family: var(--sans); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+::selection { background: var(--gold); color: var(--ink); }
+
+.page {
+  width: 100%;
+  margin: 0;
+  background: var(--bg-deep);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* centered inner container — sections go full-width, content stays at 1425 */
+.inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 100px;
+  position: relative;
+  height: 100%;
+}
+.inner--header { padding: 0 50px; display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.inner--hero   { padding: 0; height: 100%; }
+.inner--final  { padding: 0 100px; height: 100%; }
+.inner--footer { padding: 0 100px; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 12px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold);
+}
+.eyebrow::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 10px var(--gold);
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 55px; padding: 0 50px;
+  background: #fff; color: var(--ink);
+  font-family: var(--sans); font-weight: 700; font-size: 16px;
+  letter-spacing: .8px; text-transform: uppercase; text-decoration: none;
+  border: 0; border-radius: 2px; cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -15px rgba(212,165,116,.45);
+}
+.btn-primary .spark { width: 18px; height: 18px; display: block; }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 35px; padding: 0 19px;
+  background: transparent; color: var(--cream);
+  font-family: var(--sans); font-weight: 500; font-size: 12px;
+  letter-spacing: 1.44px; text-transform: uppercase;
+  border: 1px solid var(--cream-18); border-radius: 2px;
+  cursor: pointer; transition: border-color .2s, background .2s;
+}
+.btn-ghost:hover { border-color: var(--cream); background: rgba(255,255,255,.03); }
+
+.bubble {
+  position: absolute; border-radius: 50%;
+  pointer-events: none;
+  filter: blur(200px);
+}
+.bubble--pink   { background: var(--bubble-pink); opacity: .2; }
+.bubble--gold   { background: var(--bubble-gold); opacity: .3; }
+.bubble--orange { background: radial-gradient(circle, var(--bubble-orange) 0%, var(--bubble-pink) 60%, transparent 100%); opacity: .22; }
+.bubble--purple { background: radial-gradient(circle, var(--bubble-purple) 0%, #5A4580 60%, transparent 100%); opacity: .28; }
+
+/* HEADER */
+.header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 40;
+  width: 100%; height: 75px;
+}
+.logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--serif-alt); font-weight: 500; font-size: 14.5px;
+  letter-spacing: .4px; color: var(--cream); text-decoration: none;
+}
+.logo-mark { width: 32px; height: 22px; position: relative; }
+.logo-mark::before, .logo-mark::after {
+  content: ""; position: absolute; top: 3px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid var(--gold);
+}
+.logo-mark::before { left: 0; }
+.logo-mark::after  { left: 10px; background: radial-gradient(circle at 30% 30%, rgba(212,165,116,.25), transparent 60%); }
+
+.header nav { display: flex; gap: 36px; }
+.header nav a {
+  font-family: var(--sans); font-weight: 300; font-size: 14px;
+  letter-spacing: .2px; color: var(--cream);
+  text-decoration: none; opacity: .85;
+  transition: opacity .2s, color .2s;
+}
+.header nav a:hover { opacity: 1; color: var(--gold); }
+
+/* HERO */
+.hero {
+  position: relative;
+  width: 100%; height: 920px;
+  background: var(--bg);
+  overflow: hidden;
+}
+.hero__bubble-pink { left: 532px; top: 36px; width: 325px; height: 325px; }
+.hero__bubble-gold { left: -89px; top: 537px; width: 253px; height: 253px; }
+.hero__bubble-left   { left: 20px; top: 260px;  width: 300px; height: 300px; }
+.hero__bubble-right  { right: -120px; top: 40px;  width: 620px; height: 620px; }
+
+.hero__grid {
+  position: absolute; left: 100px; top: 100px;
+  width: 1225px; height: 683px;
+  display: grid;
+  grid-template-columns: 472px 546px;
+  gap: 138px;
+  align-items: center;
+}
+.hero__copy { align-self: center; }
+.hero h1 {
+  font-family: var(--serif); font-weight: 300; font-size: 75px;
+  line-height: 1.1; letter-spacing: -1.32px;
+  color: var(--cream); margin: 0 0 50px;
+}
+.hero h1 em { font-style: italic; font-weight: 400; color: var(--pink); }
+.hero__sub {
+  font-family: var(--sans); font-weight: 300; font-size: 22px;
+  line-height: 28.05px; color: var(--cream-60);
+  margin: 0 0 50px; max-width: 460px;
+}
+
+/* before / after widget */
+.ba {
+  position: relative;
+  width: 546.35px; height: 682.93px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,1);
+  user-select: none;
+  cursor: grab;
+  background: #222;
+  touch-action: none;
+}
+.ba[data-dragging="true"] { cursor: grabbing; }
+.ba__img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+}
+.ba__before { background-image: url("assets/before.png"); }
+.ba__after {
+  background-image: url("assets/after.png");
+  clip-path: inset(0 0 0 50%);
+  will-change: clip-path;
+}
+.ba__line {
+  position: absolute; top: 0; bottom: 0;
+  width: 2px; left: 50%; margin-left: -1px;
+  background: var(--gold);
+  box-shadow: 0 0 20px var(--gold-60);
+  pointer-events: none;
+  will-change: left;
+}
+.ba__handle {
+  position: absolute; top: 50%; left: 50%;
+  width: 50px; height: 50px;
+  margin: -25px 0 0 -25px;
+  border-radius: 50%;
+  background: rgba(10,8,6,.6);
+  border: 2px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.6), 0 0 0 1px var(--gold-60);
+  transition: transform .15s ease;
+}
+.ba[data-dragging="true"] .ba__handle { transform: scale(1.08); }
+.ba__handle svg { width: 8px; height: 12px; stroke: #fff; fill: none; stroke-width: 2; }
+.ba__label {
+  position: absolute; top: 20px;
+  display: inline-flex; align-items: center;
+  height: 30px; padding: 0 13px;
+  background: rgba(10,8,6,.7);
+  border-radius: 2px;
+  font-family: var(--mono); font-weight: 300;
+  font-size: 9.7px; letter-spacing: 2px;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+.ba__label--before { left: 20px; color: var(--cream); border: 1px solid var(--cream-08); }
+.ba__label--after  { right: 20px; color: #C89BA3; border: 1px solid var(--pink-30); }
+.ba__tag {
+  position: absolute; left: 16px; bottom: 16px;
+  font-family: var(--mono); font-weight: 300;
+  font-size: 9.2px; letter-spacing: 1.5px;
+  color: rgba(236,228,215,.38);
+}
+
+.hero__scroll {
+  position: absolute; left: 50%; bottom: 20px;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 11px;
+}
+.hero__scroll span {
+  font-family: var(--mono); font-weight: 300;
+  font-size: 9.4px; letter-spacing: 2.5px;
+  color: rgba(236,228,215,.5);
+  text-transform: uppercase;
+}
+.hero__scroll i {
+  display: block; width: 1px; height: 40px;
+  background: linear-gradient(rgba(0,0,0,0), var(--gold) 50%, rgba(0,0,0,0));
+  opacity: .6;
+  animation: scroll-pulse 2.2s ease-in-out infinite;
+}
+@keyframes scroll-pulse {
+  0%,100% { opacity: .25; transform: scaleY(.6); }
+  50%     { opacity: .85; transform: scaleY(1.1); }
+}
+
+/* HOW IT WORKS */
+.how {
+  position: relative;
+  width: 100%;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--cream-08);
+  border-bottom: 1px solid var(--cream-08);
+  padding: 150px 0;
+}
+.how h2 {
+  font-family: var(--serif); font-weight: 300; font-size: 60px;
+  color: var(--cream); margin: 0 0 64px;
+  line-height: 1;
+}
+.how__row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 36px; position: relative;
+}
+.how__row::before {
+  content: ""; position: absolute; left: 48px; right: 48px; top: 37px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0, var(--cream-18) 10%, var(--gold) 50%, var(--cream-18) 90%, transparent);
+}
+.step { position: relative; display: flex; flex-direction: column; }
+.step__num {
+  position: relative; z-index: 2;
+  width: 75px; height: 75px; border-radius: 50%;
+  padding: 5px; background: var(--bg-deep);
+  border: 1px solid var(--gold-15);
+}
+.step__num > span {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; border-radius: 50%;
+  background: var(--bg-deep);
+  border: 1px solid rgba(236,228,215,.2);
+  font-family: var(--serif-alt); font-size: 24px;
+  color: var(--gold);
+}
+.step__img {
+  width: 160px; height: 200px; margin-top: 40px;
+  background-size: cover; background-position: center;
+  border-radius: 2px;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,.6);
+  filter: saturate(.95);
+}
+.step__title {
+  font-family: var(--serif); font-weight: 400; font-size: 22px;
+  color: var(--cream); margin-top: 20px;
+}
+.step__desc {
+  font-family: var(--sans); font-weight: 300; font-size: 14px;
+  color: var(--cream-38); line-height: 1.4;
+  max-width: 240px;
+  margin-top: 5px;
+}
+
+/* FEATURE SECTIONS */
+.feature {
+  position: relative; width: 100%;
+  background: var(--bg-deep);
+  padding: 150px 0;
+}
+.feature__inner {
+  display: grid; grid-template-columns: 500px 600px;
+  gap: 125px; align-items: center;
+  justify-content: center;
+}
+.feature--reverse .feature__inner { grid-template-columns: 600px 500px; }
+
+.feature h3 {
+  font-family: var(--serif); font-weight: 500; font-size: 60px;
+  line-height: 1.1; color: var(--cream);
+  margin: 15px 0;
+}
+.feature h3 em { font-style: italic; font-weight: 500; color: var(--pink); }
+.feature p {
+  font-family: var(--sans); font-weight: 300; font-size: 22px;
+  line-height: 28.05px; color: var(--cream-60);
+  margin: 0; max-width: 540px;
+}
+
+/* chat card */
+.chat {
+  position: relative;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel-3));
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,.8), 0 0 0 1px var(--cream-08);
+  padding: 30px;
+  overflow: hidden;
+}
+.chat--tall { height: 625px; }
+.chat--short { height: 375px; }
+
+.chat__nav {
+  display: flex; align-items: center; gap: 14px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--cream-08);
+  margin-bottom: 20px;
+}
+.chat__nav svg { width: 8px; height: 14px; }
+.chat__nav span { font-family: var(--sans); font-weight: 500; font-size: 18px; color: var(--cream); }
+.chat__nav .dot {
+  margin-left: auto; width: 8px; height: 8px; border-radius: 50%;
+  background: #6BD67A;
+  box-shadow: 0 0 10px rgba(107,214,122,.6);
+}
+
+.msgs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.msg {
+  max-width: 300px;
+  padding: 12px 15px;
+  font-family: var(--sans); font-size: 14px; line-height: 1.2;
+  border-radius: 15px;
+}
+.msg-user {
+  align-self: flex-end;
+  color: var(--cream);
+  background: linear-gradient(135deg, var(--pink-20), var(--gold-12));
+  border: 1px solid var(--pink-30);
+  border-bottom-right-radius: 4px;
+}
+.msg-row { display: flex; align-items: flex-start; gap: 10px; }
+.msg-row .avatar {
+  flex: 0 0 40px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: url("assets/after.png") center 15% / cover no-repeat;
+  border: 1px solid rgba(255,255,255,.15);
+}
+.msg-row .stack { display: flex; flex-direction: column; gap: 5px; max-width: 310px; align-items: flex-start; }
+.msg-ai {
+  align-self: flex-start;
+  color: #000;
+  background: var(--pink);
+  border: 1px solid var(--pink-soft);
+  border-bottom-left-radius: 4px;
+}
+.msg-voice {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  color: #000;
+  background: var(--pink);
+  border: 1px solid var(--pink-soft);
+  border-radius: 15px;
+}
+.msg-voice .play {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #fff; color: #000;
+  display: grid; place-items: center;
+  cursor: pointer; border: 0;
+}
+.msg-voice .play svg { width: 8px; height: 10px; fill: #000; }
+.bars { display: flex; align-items: center; gap: 3px; height: 20px; }
+.bars span {
+  display: block; width: 3px; background: rgba(0,0,0,.65); border-radius: 2px;
+  animation: bar 1.1s ease-in-out infinite;
+}
+@keyframes bar {
+  0%,100% { height: 30%; }
+  50%     { height: 100%; }
+}
+.msg-voice time { font-family: var(--sans); font-size: 14px; color: #000; margin-left: auto; }
+.msg-photo {
+  padding: 0; background: #18140F; border: 1px solid rgba(255,255,255,.15);
+  border-radius: 15px; overflow: hidden; width: 234.375px; height: 300px;
+}
+.msg-photo div {
+  width: 100%; height: 100%;
+  background: url("assets/couple-park.png") center/cover no-repeat;
+}
+.typing {
+  display: inline-flex; gap: 4px; padding: 14px 15px;
+  background: var(--pink);
+  border: 1px solid var(--pink-soft);
+  border-radius: 14px 14px 14px 4px;
+  align-self: flex-start;
+  width: auto;
+}
+.typing span {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(0,0,0,.7);
+  animation: dots 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes dots {
+  0%, 60%, 100% { opacity: .3; transform: translateY(0); }
+  30%           { opacity: 1;  transform: translateY(-3px); }
+}
+
+.chat__input {
+  position: absolute; left: 30px; right: 30px; bottom: 30px;
+  height: 50px; border-radius: 100px;
+  background: var(--ink);
+  border: 1px solid var(--cream-18);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 15px;
+}
+.chat__input .placeholder {
+  flex: 1;
+  font-family: var(--sans); font-weight: 300; font-size: 13px;
+  color: var(--cream-38);
+}
+.chat__input .icon { width: 20px; height: 20px; color: var(--cream); opacity: .5; }
+
+/* GALLERY */
+.gallery {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, var(--bg) 0%, #302835 100%);
+  border-top: 1px solid var(--cream-08);
+  border-bottom: 1px solid var(--cream-08);
+  padding: 90px 0 100px;
+  overflow: hidden;
+}
+.gallery__head { text-align: center; margin-bottom: 36px; }
+.gallery__head h2 {
+  font-family: var(--serif); font-weight: 300; font-size: 60px;
+  color: var(--cream); margin: 14px 0 8px; line-height: 1;
+}
+.gallery__head h2 em { font-style: italic; font-weight: 400; color: var(--pink); }
+.gallery__head p {
+  font-family: var(--sans); font-weight: 300; font-size: 22px;
+  color: var(--cream-60); margin: 6px 0 0;
+}
+
+.gallery__viewport {
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent);
+}
+.gallery__track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: gallery-scroll 50s linear infinite;
+  will-change: transform;
+}
+@keyframes gallery-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-1680px, 0, 0); }
+}
+
+.gcard {
+  flex: 0 0 260px;
+  height: 352px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(110,72,80,.27) 0%, rgba(10,8,6,1) 100%);
+  border: 1px solid var(--cream-08);
+  padding: 15px;
+  display: flex; flex-direction: column; align-items: center; gap: 15px;
+  transition: transform .3s ease, border-color .3s;
+}
+.gcard:hover { border-color: var(--gold-35); }
+.gcard__img {
+  width: 230px; height: 288px;
+  background-size: cover; background-position: center;
+  border-radius: 2px;
+}
+.gcard__cap {
+  font-family: var(--mono-alt); font-weight: 300; font-size: 12px;
+  color: var(--gold); letter-spacing: .5px;
+}
+.gcard:nth-child(6n+2) { background: linear-gradient(180deg, rgba(160,104,72,.27), rgba(10,8,6,1)); }
+.gcard:nth-child(6n+3) { background: linear-gradient(180deg, rgba(92,77,69,.27), rgba(10,8,6,1)); }
+.gcard:nth-child(6n+4) { background: linear-gradient(180deg, rgba(110,72,80,.27), rgba(10,8,6,1)); }
+.gcard:nth-child(6n+5) { background: linear-gradient(180deg, rgba(160,104,72,.27), rgba(10,8,6,1)); }
+.gcard:nth-child(6n)   { background: linear-gradient(180deg, rgba(92,77,69,.27), rgba(10,8,6,1)); }
+
+/* PRICING */
+.pricing {
+  position: relative; width: 100%;
+  background: var(--bg-deeper);
+  border-top: 1px solid var(--cream-08);
+  border-bottom: 1px solid var(--cream-08);
+  padding: 150px 0;
+  text-align: center;
+}
+.pricing__head { margin-bottom: 80px; }
+.pricing__head h2 {
+  font-family: var(--serif); font-weight: 300; font-size: 60px;
+  color: var(--cream); margin: 20px 0 0; line-height: 1;
+}
+.pricing__head h2 em { font-style: italic; font-weight: 400; color: var(--pink); }
+
+.pricing__grid {
+  display: grid; grid-template-columns: 450px 450px;
+  gap: 30px; justify-content: center;
+}
+.plan {
+  position: relative;
+  width: 450px; height: 540px;
+  border-radius: 3px;
+  padding: 50px 45px;
+  background: var(--bg-panel);
+  border: 1px solid var(--cream-08);
+  text-align: left;
+  display: flex; flex-direction: column;
+}
+.plan--vip {
+  background: radial-gradient(circle at 20% 0%, rgba(212,165,116,.08) 0%, transparent 60%), var(--bg-panel);
+  border: 1px solid var(--gold-35);
+}
+.plan__tier {
+  font-family: var(--sans); font-size: 12px; letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.plan--basic .plan__tier { color: var(--cream-62); }
+.plan--vip   .plan__tier { color: var(--gold); }
+.plan__price {
+  font-family: var(--serif-alt); font-weight: 300; font-size: 50px;
+  line-height: 72px; color: var(--cream);
+  margin: 30px 0 30px;
+}
+.plan__price small { font-size: 18px; color: var(--cream-62); font-family: var(--sans); font-weight: 300; letter-spacing: 0; }
+.plan__features { list-style: none; padding: 0; margin: 0 0 30px; flex: 1; }
+.plan__features li {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cream-08);
+  font-family: var(--sans); font-weight: 300; font-size: 14px;
+  line-height: 22.4px;
+}
+.plan__features li.ok    { color: var(--cream); }
+.plan__features li.no    { color: var(--cream-62); }
+.plan__features li svg   { flex: 0 0 16px; }
+.plan__btn {
+  display: block;
+  height: 53px; line-height: 53px;
+  text-align: center;
+  font-family: var(--sans); font-size: 16px; letter-spacing: .8px;
+  text-transform: uppercase; text-decoration: none;
+  border-radius: 2px;
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+.plan--basic .plan__btn {
+  font-weight: 300; color: var(--cream);
+  border: 1px solid var(--cream-15);
+  background: transparent;
+}
+.plan--basic .plan__btn:hover { border-color: var(--cream); }
+.plan--vip .plan__btn {
+  font-weight: 700; color: var(--ink);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+}
+.plan--vip .plan__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -15px rgba(212,165,116,.55);
+}
+.plan__badge {
+  position: absolute; left: 41px; top: -12px;
+  padding: 5px 15px; height: 25px;
+  display: inline-flex; align-items: center;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--sans); font-size: 12px;
+  letter-spacing: 3px; text-transform: uppercase;
+}
+
+/* FINAL CTA + FOOTER */
+.final {
+  position: relative; width: 100%; height: 648px;
+  background: var(--bg);
+  padding: 150px 0;
+  overflow: hidden;
+}
+.final__bubble-pink { right: 96px; top: -132px; width: 325px; height: 325px; }
+.final__bubble-gold { left: 68px; top: 446px; width: 253px; height: 253px; }
+.final__inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 50px;
+  text-align: center;
+}
+.final h2 {
+  font-family: var(--serif); font-weight: 300; font-size: 90px;
+  line-height: 1; letter-spacing: -1.32px;
+  color: var(--cream); margin: 20px 0 0;
+}
+.final h2 em { font-style: italic; font-weight: 400; color: var(--pink); }
+
+.footer {
+  position: relative; width: 100%; height: 232px;
+  background: #000;
+  border-top: 1px solid var(--cream-08);
+}
+.footer__inner {
+  width: 1000px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer small {
+  font-family: var(--sans); font-size: 12px;
+  color: var(--cream-38);
+}
+.footer nav { display: flex; gap: 30px; }
+.footer nav a {
+  font-family: var(--sans); font-size: 12px; color: var(--cream-38);
+  text-decoration: none; letter-spacing: .3px;
+  transition: color .2s;
+}
+.footer nav a:hover { color: var(--cream); }
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+.reveal-group > .reveal { transition-delay: 0ms; }
+.reveal-group > .reveal:nth-child(2) { transition-delay: 80ms; }
+.reveal-group > .reveal:nth-child(3) { transition-delay: 160ms; }
+.reveal-group > .reveal:nth-child(4) { transition-delay: 240ms; }
+.reveal-group > .reveal:nth-child(5) { transition-delay: 320ms; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-group > .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div class="inner inner--header">
+      <a href="#" class="logo">
+        <span class="logo-mark" aria-hidden="true"></span>
+        SoulMatch
+      </a>
+      <nav>
+        <a href="#how">How it Works</a>
+        <a href="#features">Features</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <button class="btn-ghost">Sign in</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="inner inner--hero">
+      <div class="bubble bubble--orange hero__bubble-left"></div>
+      <div class="bubble bubble--purple hero__bubble-right"></div>
+      <div class="bubble bubble--pink hero__bubble-pink"></div>
+      <div class="bubble bubble--gold hero__bubble-gold"></div>
+
+      <div class="hero__grid">
+        <div class="hero__copy reveal-group">
+          <h1 class="reveal">Discover who<br>AI thinks is your<br><em>perfect partner</em></h1>
+          <p class="hero__sub reveal">Upload your photo and meet your AI match<br>— with voice, personality, and memory</p>
+          <a href="#" class="btn-primary reveal">
+            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12 2 L13.7 9.3 L21 11 L13.7 12.7 L12 20 L10.3 12.7 L3 11 L10.3 9.3 Z"/>
+            </svg>
+            See My Match
+          </a>
+        </div>
+
+        <div class="ba reveal" id="ba" aria-label="Before and after">
+          <div class="ba__img ba__before" aria-hidden="true"></div>
+          <div class="ba__img ba__after"  id="ba-after" aria-hidden="true"></div>
+
+          <span class="ba__label ba__label--before">Before</span>
+          <span class="ba__label ba__label--after">After</span>
+
+          <div class="ba__tag">// your photo</div>
+
+          <div class="ba__line" id="ba-line">
+            <div class="ba__handle" id="ba-handle" aria-hidden="true">
+              <svg viewBox="0 0 8 12"><polyline points="6,1 1,6 6,11"/></svg>
+              <svg viewBox="0 0 8 12"><polyline points="2,1 7,6 2,11"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__scroll">
+        <span>Scroll</span>
+        <i></i>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="inner">
+      <h2 class="reveal">How it Works</h2>
+
+      <div class="how__row reveal-group">
+        <div class="step reveal">
+          <div class="step__num"><span>I</span></div>
+          <div class="step__img" style="background-image:url('assets/step.png')"></div>
+          <div class="step__title">Upload your photo</div>
+          <div class="step__desc">A simple selfie</div>
+        </div>
+        <div class="step reveal">
+          <div class="step__num"><span>II</span></div>
+          <div class="step__img" style="background-image:url('assets/ai-analyzes.png')"></div>
+          <div class="step__title">AI analyzes you</div>
+          <div class="step__desc">Your look, style, and vibe to find your match</div>
+        </div>
+        <div class="step reveal">
+          <div class="step__num"><span>III</span></div>
+          <div class="step__img" style="background-image:url('assets/after.png'); background-position: center 20%"></div>
+          <div class="step__title">Your match is created</div>
+          <div class="step__desc">Face, personality &amp; a photo together</div>
+        </div>
+        <div class="step reveal">
+          <div class="step__num"><span>IV</span></div>
+          <div class="step__img" style="background-image:url('assets/start-conversation.png')"></div>
+          <div class="step__title">Start the conversation</div>
+          <div class="step__desc">They respond, remember, and evolve with you</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature" id="features">
+    <div class="inner">
+      <div class="feature__inner reveal-group">
+        <div class="chat chat--tall reveal">
+          <div class="chat__nav">
+            <svg viewBox="0 0 8 14" fill="none" stroke="#fff" stroke-width="1.5">
+              <polyline points="6,1 1,7 6,13"/>
+            </svg>
+            <span>Julian Garcia</span>
+            <span class="dot" title="Online"></span>
+          </div>
+
+          <div class="msgs">
+            <div class="msg msg-user">send me a picture of us in the park</div>
+            <div class="msg-row">
+              <div class="avatar"></div>
+              <div class="stack">
+                <div class="msg msg-ai">one sec ♡</div>
+                <div class="msg msg-photo"><div></div></div>
+              </div>
+            </div>
+            <div class="msg msg-user">😭 that's us</div>
+          </div>
+
+          <div class="chat__input">
+            <span class="placeholder">Write something…</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="9" y="3" width="6" height="12" rx="3"/>
+              <path d="M5 11a7 7 0 0 0 14 0 M12 18v3"/>
+            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 12 L21 3 L18 12 L21 21 Z" opacity=".9"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <span class="eyebrow">Photos &amp; Videos</span>
+          <h3>Generate <em>photos and videos</em> of any moment you imagine.</h3>
+          <p>“Send me a photo of us at the beach.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature feature--reverse">
+    <div class="inner">
+      <div class="feature__inner reveal-group">
+        <div class="reveal">
+          <span class="eyebrow">Voice &amp; Memory</span>
+          <h3>They remember you.<br>They <em>sound real</em>.</h3>
+          <p>They remember what you shared — and respond naturally, in voice and text</p>
+        </div>
+
+        <div class="chat chat--short reveal">
+          <div class="chat__nav">
+            <svg viewBox="0 0 8 14" fill="none" stroke="#fff" stroke-width="1.5"><polyline points="6,1 1,7 6,13"/></svg>
+            <span>Julian Garcia</span>
+            <span class="dot"></span>
+          </div>
+
+          <div class="msgs">
+            <div class="msg msg-user">I told you yesterday… remember?</div>
+            <div class="msg-row">
+              <div class="avatar"></div>
+              <div class="stack">
+                <div class="msg msg-ai">of course. I couldn't stop thinking about it</div>
+                <div class="msg-voice">
+                  <button class="play" aria-label="Play voice note">
+                    <svg viewBox="0 0 10 12"><path d="M0 0 L10 6 L0 12 Z"/></svg>
+                  </button>
+                  <div class="bars">
+                    <span style="height:40%;animation-delay:0s"></span>
+                    <span style="height:70%;animation-delay:.05s"></span>
+                    <span style="height:90%;animation-delay:.1s"></span>
+                    <span style="height:60%;animation-delay:.15s"></span>
+                    <span style="height:85%;animation-delay:.2s"></span>
+                    <span style="height:45%;animation-delay:.25s"></span>
+                    <span style="height:75%;animation-delay:.3s"></span>
+                    <span style="height:100%;animation-delay:.35s"></span>
+                    <span style="height:55%;animation-delay:.4s"></span>
+                    <span style="height:80%;animation-delay:.45s"></span>
+                    <span style="height:40%;animation-delay:.5s"></span>
+                    <span style="height:65%;animation-delay:.55s"></span>
+                  </div>
+                  <time>0:12</time>
+                </div>
+                <div class="typing"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat__input">
+            <span class="placeholder">Write something…</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="9" y="3" width="6" height="12" rx="3"/>
+              <path d="M5 11a7 7 0 0 0 14 0 M12 18v3"/>
+            </svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12 L21 3 L18 12 L21 21 Z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery">
+    <div class="inner">
+      <div class="gallery__head reveal">
+        <span class="eyebrow">Gallery</span>
+        <h2>Moments you've <em>always imagined</em></h2>
+        <p>Made real, just for you.</p>
+      </div>
+    </div>
+
+    <div class="gallery__viewport reveal">
+      <div class="gallery__track" id="gallery-track">
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Liam%20%26%20Ava.png')"></div><div class="gcard__cap">Liam &amp; Ava</div></div>
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Noah%20%26%20Mia.png'); background-position: center 20%"></div><div class="gcard__cap">Noah &amp; Mia</div></div>
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Zoe%2C%20Ethan%20%26%20lilly.png')"></div><div class="gcard__cap">Zoe, Ethan &amp; Lilly</div></div>
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Oliver%20%26%20Lily.png'); background-position: center 30%"></div><div class="gcard__cap">Oliver &amp; Lily</div></div>
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Mason%20%26%20Sophia.png')"></div><div class="gcard__cap">Mason &amp; Sophia</div></div>
+        <div class="gcard"><div class="gcard__img" style="background-image:url('assets/Lucas%20%26%20Emma.png'); background-position: 30% center"></div><div class="gcard__cap">Lucas &amp; Emma</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Liam%20%26%20Ava.png')"></div><div class="gcard__cap">Liam &amp; Ava</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Noah%20%26%20Mia.png'); background-position: center 20%"></div><div class="gcard__cap">Noah &amp; Mia</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Zoe%2C%20Ethan%20%26%20lilly.png')"></div><div class="gcard__cap">Zoe, Ethan &amp; Lilly</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Oliver%20%26%20Lily.png'); background-position: center 30%"></div><div class="gcard__cap">Oliver &amp; Lily</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Mason%20%26%20Sophia.png')"></div><div class="gcard__cap">Mason &amp; Sophia</div></div>
+        <div class="gcard" aria-hidden="true"><div class="gcard__img" style="background-image:url('assets/Lucas%20%26%20Emma.png'); background-position: 30% center"></div><div class="gcard__cap">Lucas &amp; Emma</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="inner">
+      <div class="pricing__head reveal">
+        <span class="eyebrow">Pricing</span>
+        <h2>Start free. <em>Stay as long as you like.</em></h2>
+      </div>
+
+      <div class="pricing__grid reveal-group">
+        <div class="plan plan--basic reveal">
+          <span class="plan__tier">Basic</span>
+          <div class="plan__price">$0</div>
+          <ul class="plan__features">
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> 1 soulmate, yours to keep</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> 10 messages</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> 1 couple photo</li>
+            <li class="no"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".5"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg> Voice messages</li>
+            <li class="no"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".5"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg> In-chat photo &amp; video generation</li>
+          </ul>
+          <a class="plan__btn">Start free</a>
+        </div>
+
+        <div class="plan plan--vip reveal">
+          <span class="plan__badge">Recommended</span>
+          <span class="plan__tier">VIP</span>
+          <div class="plan__price">$19.99 <small>/ month</small></div>
+          <ul class="plan__features">
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> Unlimited soulmates</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> Unlimited messages</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> Unlimited voice messages</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> Voice messages</li>
+            <li class="ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3,8 7,12 13,4"/></svg> In-chat photo &amp; video generation</li>
+          </ul>
+          <a class="plan__btn">Go Pro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="inner inner--final">
+      <div class="bubble bubble--pink final__bubble-pink"></div>
+      <div class="bubble bubble--gold final__bubble-gold"></div>
+
+      <div class="final__inner reveal-group">
+        <span class="eyebrow reveal">Begin</span>
+        <h2 class="reveal">Your AI partner is<br>waiting <em>for you…</em></h2>
+        <a href="#" class="btn-primary reveal">
+          <svg class="spark" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 2 L13.7 9.3 L21 11 L13.7 12.7 L12 20 L10.3 12.7 L3 11 L10.3 9.3 Z"/>
+          </svg>
+          See My Match
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="inner inner--footer">
+      <div class="footer__inner">
+        <a href="#" class="logo">
+          <span class="logo-mark"></span>
+          SoulMatch
+        </a>
+        <small>© 2026 Soulmate Labs · Made with intention, not addiction.</small>
+        <nav>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const wrap  = document.getElementById('ba');
+  const after = document.getElementById('ba-after');
+  const line  = document.getElementById('ba-line');
+  if (!wrap) return;
+
+  let dragging = false;
+  let userEngaged = false;
+  let pos = 50;
+  let dir = 1;
+  let lastTs = 0;
+  const AUTO_SPEED = 8;
+  const AUTO_MIN = 20;
+  const AUTO_MAX = 80;
+  const AUTO_RESUME_MS = 2500;
+  let resumeTimer = 0;
+
+  const setPos = (pct) => {
+    pct = Math.max(0, Math.min(100, pct));
+    pos = pct;
+    after.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+    line.style.left      = pct + '%';
+  };
+
+  setPos(50);
+
+  const pctFromEvent = (e) => {
+    const r = wrap.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    return (x / r.width) * 100;
+  };
+
+  const pauseAuto = () => {
+    userEngaged = true;
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { userEngaged = false; lastTs = 0; }, AUTO_RESUME_MS);
+  };
+
+  const onDown = (e) => {
+    dragging = true;
+    wrap.dataset.dragging = 'true';
+    pauseAuto();
+    setPos(pctFromEvent(e));
+    e.preventDefault();
+  };
+  const onMove = (e) => {
+    if (!dragging) return;
+    setPos(pctFromEvent(e));
+    e.preventDefault();
+  };
+  const onUp = () => {
+    if (!dragging) return;
+    dragging = false;
+    wrap.dataset.dragging = 'false';
+    clearTimeout(resumeTimer);
+    userEngaged = false;
+    lastTs = 0;
+  };
+
+  wrap.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+
+  wrap.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('touchend', onUp);
+
+  const tick = (ts) => {
+    if (!dragging && !userEngaged) {
+      if (lastTs) {
+        const dt = (ts - lastTs) / 1000;
+        pos += dir * AUTO_SPEED * dt;
+        if (pos >= AUTO_MAX) { pos = AUTO_MAX; dir = -1; }
+        else if (pos <= AUTO_MIN) { pos = AUTO_MIN; dir = 1; }
+        setPos(pos);
+      }
+      lastTs = ts;
+    } else {
+      lastTs = 0;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+})();
+
+(function () {
+  const targets = document.querySelectorAll('.reveal');
+  if (!targets.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealAll = () => targets.forEach(el => el.classList.add('is-in'));
+  if (reduce || !('IntersectionObserver' in window)) { revealAll(); return; }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -5% 0px', threshold: 0 });
+  targets.forEach(el => io.observe(el));
+
+  const inViewport = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.top < (window.innerHeight || document.documentElement.clientHeight) && r.bottom > 0;
+  };
+  const revealInView = () => targets.forEach(el => { if (!el.classList.contains('is-in') && inViewport(el)) el.classList.add('is-in'); });
+  requestAnimationFrame(() => { revealInView(); setTimeout(revealInView, 300); });
+  window.addEventListener('load', revealInView);
+  setTimeout(revealAll, 3000);
+})();
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href');
+    if (id.length < 2) return;
+    const el = document.querySelector(id);
+    if (!el) return;
+    e.preventDefault();
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
